@@ -45,9 +45,30 @@ exports.registerUser = async (req, res) => {
       }
     });
   } catch (error) {
+    console.error('Registration error:', error);
+
+    // Handle mongoose validation errors
+    if (error.name === 'ValidationError') {
+      const messages = Object.values(error.errors).map(val => val.message);
+      return res.status(400).json({
+        success: false,
+        error: messages.join(', ')
+      });
+    }
+
+    // Handle duplicate key errors (code 11000)
+    if (error.code === 11000) {
+      const field = Object.keys(error.keyValue)[0];
+      return res.status(400).json({
+        success: false,
+        error: `${field.charAt(0).toUpperCase() + field.slice(1)} is already taken`
+      });
+    }
+
+    // Handle other errors
     res.status(500).json({
       success: false,
-      error: error.message
+      error: 'An error occurred during registration. Please try again later.'
     });
   }
 };
@@ -100,9 +121,20 @@ exports.loginUser = async (req, res) => {
       }
     });
   } catch (error) {
+    console.error('Login error:', error);
+
+    // Handle specific error types
+    if (error.message === 'Authentication error. Please try again.') {
+      return res.status(401).json({
+        success: false,
+        error: 'Invalid credentials'
+      });
+    }
+
+    // Handle other errors
     res.status(500).json({
       success: false,
-      error: error.message
+      error: 'An error occurred during login. Please try again later.'
     });
   }
 };
@@ -124,9 +156,20 @@ exports.getUserProfile = async (req, res) => {
       }
     });
   } catch (error) {
+    console.error('Get user profile error:', error);
+
+    // Handle not found errors
+    if (error.kind === 'ObjectId') {
+      return res.status(404).json({
+        success: false,
+        error: 'User not found'
+      });
+    }
+
+    // Handle other errors
     res.status(500).json({
       success: false,
-      error: error.message
+      error: 'An error occurred while retrieving your profile. Please try again later.'
     });
   }
 };
