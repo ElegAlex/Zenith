@@ -1,4 +1,4 @@
-import React, { createContext, useState, useEffect } from 'react';
+import React, { createContext, useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
 import api from '../utils/api';
@@ -17,6 +17,20 @@ export const AuthProvider = ({ children }) => {
 
   // Token is handled by api interceptor in utils/api.js
   // No need to set headers manually
+
+  // Logout user
+  const logout = useCallback(() => {
+    // Remove token from localStorage
+    localStorage.removeItem('token');
+
+    // Reset state
+    setToken(null);
+    setUser(null);
+    setIsAuthenticated(false);
+
+    // Redirect to login
+    navigate('/login');
+  }, [navigate]);
 
   // Check if user is authenticated on initial load
   useEffect(() => {
@@ -108,19 +122,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // Logout user
-  const logout = () => {
-    // Remove token from localStorage
-    localStorage.removeItem('token');
-
-    // Reset state
-    setToken(null);
-    setUser(null);
-    setIsAuthenticated(false);
-
-    // Redirect to login
-    navigate('/login');
-  };
 
   // Clear error
   const clearError = () => {
