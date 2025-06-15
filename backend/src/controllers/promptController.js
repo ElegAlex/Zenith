@@ -1,6 +1,7 @@
 const Prompt = require('../models/Prompt');
 const Project = require('../models/Project');
 const AIModel = require('../models/AIModel');
+const handleServerError = require('../utils/handleServerError');
 
 // @desc    Create a new prompt
 // @route   POST /api/prompts
@@ -53,10 +54,7 @@ exports.createPrompt = async (req, res) => {
       data: prompt
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    handleServerError(res, error);
   }
 };
 
@@ -107,10 +105,7 @@ exports.getPrompts = async (req, res) => {
       data: prompts
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    handleServerError(res, error);
   }
 };
 
@@ -143,10 +138,7 @@ exports.getPrompt = async (req, res) => {
       data: prompt
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    handleServerError(res, error);
   }
 };
 
@@ -218,10 +210,7 @@ exports.updatePrompt = async (req, res) => {
       data: prompt
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    handleServerError(res, error);
   }
 };
 
@@ -254,10 +243,7 @@ exports.deletePrompt = async (req, res) => {
       data: {}
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    handleServerError(res, error);
   }
 };
 
@@ -291,9 +277,6 @@ exports.usePrompt = async (req, res) => {
       data: prompt
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    handleServerError(res, error);
   }
 };

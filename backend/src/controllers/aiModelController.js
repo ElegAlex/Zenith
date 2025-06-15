@@ -1,4 +1,5 @@
 const AIModel = require('../models/AIModel');
+const handleServerError = require('../utils/handleServerError');
 
 // @desc    Create a new AI model
 // @route   POST /api/ai-models
@@ -21,10 +22,7 @@ exports.createAIModel = async (req, res) => {
       data: aiModel
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    handleServerError(res, error);
   }
 };
 
@@ -47,10 +45,7 @@ exports.getAIModels = async (req, res) => {
       data: aiModels
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    handleServerError(res, error);
   }
 };
 
@@ -81,10 +76,7 @@ exports.getAIModel = async (req, res) => {
       data: aiModel
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    handleServerError(res, error);
   }
 };
 
@@ -133,10 +125,7 @@ exports.updateAIModel = async (req, res) => {
       data: aiModel
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    handleServerError(res, error);
   }
 };
 
@@ -177,10 +166,7 @@ exports.deleteAIModel = async (req, res) => {
       data: {}
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    handleServerError(res, error);
   }
 };
 
@@ -231,9 +217,6 @@ exports.seedAIModels = async (req, res) => {
       message: 'System AI models seeded successfully'
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    handleServerError(res, error);
   }
 };

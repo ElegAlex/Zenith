@@ -1,5 +1,6 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
+const handleServerError = require('../utils/handleServerError');
 
 // Helper function to generate JWT token
 const generateToken = (id) => {
@@ -45,10 +46,7 @@ exports.registerUser = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    handleServerError(res, error);
   }
 };
 
@@ -100,10 +98,7 @@ exports.loginUser = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    handleServerError(res, error);
   }
 };
 
@@ -124,9 +119,6 @@ exports.getUserProfile = async (req, res) => {
       }
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    handleServerError(res, error);
   }
 };

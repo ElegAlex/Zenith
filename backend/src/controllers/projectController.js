@@ -1,4 +1,5 @@
 const Project = require('../models/Project');
+const handleServerError = require('../utils/handleServerError');
 
 // @desc    Create a new project
 // @route   POST /api/projects
@@ -20,10 +21,7 @@ exports.createProject = async (req, res) => {
       data: project
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    handleServerError(res, error);
   }
 };
 
@@ -40,10 +38,7 @@ exports.getProjects = async (req, res) => {
       data: projects
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    handleServerError(res, error);
   }
 };
 
@@ -74,10 +69,7 @@ exports.getProject = async (req, res) => {
       data: project
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    handleServerError(res, error);
   }
 };
 
@@ -118,10 +110,7 @@ exports.updateProject = async (req, res) => {
       data: project
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    handleServerError(res, error);
   }
 };
 
@@ -154,9 +143,6 @@ exports.deleteProject = async (req, res) => {
       data: {}
     });
   } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: error.message
-    });
+    handleServerError(res, error);
   }
 };
