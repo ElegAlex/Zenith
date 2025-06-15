@@ -53,6 +53,20 @@ npm install
 npm run dev
 ```
 
+## Backend Setup
+
+Create a `.env` file inside the `backend` directory with the following variables:
+
+```env
+MONGODB_URI=your_mongodb_connection_string
+JWT_SECRET=your_jwt_secret
+JWT_EXPIRES_IN=7d
+# PORT=5000
+```
+
+`MONGODB_URI`, `JWT_SECRET`, and `JWT_EXPIRES_IN` are required. `PORT` is optional and defaults to `5000`.
+The backend expects a MongoDB database connection rather than Netlify DB or Postgres. An example configuration is provided in `backend/.env.example`.
+
 ## Building for Production
 
 ### Frontend
