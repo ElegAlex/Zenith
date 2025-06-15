@@ -84,3 +84,20 @@ cd backend
 npm install
 npm start
 ```
+
+## Deploying the Backend
+
+The Express server in the `backend` directory needs to be hosted separately from
+the static frontend files. You can deploy it to any Node-friendly provider
+(e.g., Render, Heroku or a VPS) or package it as a serverless function. Ensure
+that your `.env` values are provided in the hosting environment and start the
+server using `npm start` or your process manager of choice.
+
+Once deployed, expose the public URL of this server through the
+`REACT_APP_API_URL` environment variable so the frontend can reach your API.
+
+## Netlify Configuration
+
+The included `netlify.toml` only builds and publishes the React app from
+`frontend/build` and does **not** run the Express backend. Make sure your backend
+is running elsewhere; otherwise API calls from the frontend will fail.
