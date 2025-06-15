@@ -64,11 +64,6 @@ const Login = () => {
                 Please check your internet connection and try again. If the problem persists, the server might be down.
               </p>
             )}
-            {formError.includes('An error occurred during login') && (
-              <p className="error-help-text">
-                We're experiencing some technical difficulties. Please try again in a few moments or contact our support team at <a href="mailto:support@zenith.com" className="auth-link">support@zenith.com</a> if the problem persists.
-              </p>
-            )}
           </div>
         )}
 
