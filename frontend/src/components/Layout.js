@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { Outlet, NavLink } from 'react-router-dom';
 import { AuthContext } from '../context/AuthContext';
 import { FiHome, FiFolder, FiMessageSquare, FiCpu, FiUser, FiLogOut, FiMenu, FiX } from 'react-icons/fi';
 
