@@ -83,11 +83,18 @@ export const AuthProvider = ({ children }) => {
       navigate('/');
       return true;
     } catch (err) {
-      setError(
-        err.response && err.response.data.error
-          ? err.response.data.error
-          : 'Registration failed. Please try again.'
-      );
+      // Provide more specific error messages based on the error
+      if (err.response && err.response.data.error) {
+        // If the server provides an error message, use it
+        setError(err.response.data.error);
+      } else if (err.message === 'Network Error') {
+        // Handle network errors
+        setError('Unable to connect to the server. Please check your internet connection and try again.');
+      } else {
+        // Fallback to a more helpful generic message
+        setError('An error occurred during registration. Please try again later or contact support if the problem persists.');
+      }
+      console.error('Registration error:', err);
       return false;
     } finally {
       setLoading(false);
@@ -111,11 +118,18 @@ export const AuthProvider = ({ children }) => {
       navigate('/');
       return true;
     } catch (err) {
-      setError(
-        err.response && err.response.data.error
-          ? err.response.data.error
-          : 'Login failed. Please check your credentials.'
-      );
+      // Provide more specific error messages based on the error
+      if (err.response && err.response.data.error) {
+        // If the server provides an error message, use it
+        setError(err.response.data.error);
+      } else if (err.message === 'Network Error') {
+        // Handle network errors
+        setError('Unable to connect to the server. Please check your internet connection and try again.');
+      } else {
+        // Fallback to a more helpful generic message
+        setError('An error occurred during login. Please try again later or contact support if the problem persists.');
+      }
+      console.error('Login error:', err);
       return false;
     } finally {
       setLoading(false);

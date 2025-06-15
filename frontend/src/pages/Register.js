@@ -9,56 +9,56 @@ const Register = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [formError, setFormError] = useState('');
-  
+
   const { register, error, clearError, isAuthenticated } = useContext(AuthContext);
   const navigate = useNavigate();
-  
+
   // Redirect if already authenticated
   useEffect(() => {
     if (isAuthenticated) {
       navigate('/');
     }
-    
+
     // Clear any previous errors when component mounts
     clearError();
   }, [isAuthenticated, navigate, clearError]);
-  
+
   // Update form error when context error changes
   useEffect(() => {
     if (error) {
       setFormError(error);
     }
   }, [error]);
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setFormError('');
-    
+
     // Simple validation
     if (!username || !email || !password || !confirmPassword) {
       setFormError('Please fill in all fields');
       return;
     }
-    
+
     if (username.length < 3) {
       setFormError('Username must be at least 3 characters long');
       return;
     }
-    
+
     if (password.length < 6) {
       setFormError('Password must be at least 6 characters long');
       return;
     }
-    
+
     if (password !== confirmPassword) {
       setFormError('Passwords do not match');
       return;
     }
-    
+
     // Attempt registration
     await register({ username, email, password });
   };
-  
+
   return (
     <div className="auth-container">
       <div className="auth-card">
@@ -66,14 +66,24 @@ const Register = () => {
           <h1 className="auth-title">Create an Account</h1>
           <p className="auth-subtitle">Join Zenith to manage your AI prompts</p>
         </div>
-        
+
         {formError && (
           <div className="error-message">
             <FiAlertCircle />
             <span>{formError}</span>
+            {formError.includes('User already exists') && (
+              <p className="error-help-text">
+                Try using a different username or email, or <Link to="/login" className="auth-link">log in</Link> if you already have an account.
+              </p>
+            )}
+            {formError.includes('Unable to connect') && (
+              <p className="error-help-text">
+                Please check your internet connection and try again. If the problem persists, the server might be down.
+              </p>
+            )}
           </div>
         )}
-        
+
         <form onSubmit={handleSubmit} className="auth-form">
           <div className="form-group">
             <label htmlFor="username">Username</label>
@@ -89,7 +99,7 @@ const Register = () => {
               />
             </div>
           </div>
-          
+
           <div className="form-group">
             <label htmlFor="email">Email</label>
             <div className="input-with-icon">
@@ -104,7 +114,7 @@ const Register = () => {
               />
             </div>
           </div>
-          
+
           <div className="form-group">
             <label htmlFor="password">Password</label>
             <div className="input-with-icon">
@@ -122,7 +132,7 @@ const Register = () => {
               Password must be at least 6 characters long
             </small>
           </div>
-          
+
           <div className="form-group">
             <label htmlFor="confirmPassword">Confirm Password</label>
             <div className="input-with-icon">
@@ -137,12 +147,12 @@ const Register = () => {
               />
             </div>
           </div>
-          
+
           <button type="submit" className="auth-button">
             Sign Up
           </button>
         </form>
-        
+
         <div className="auth-footer">
           <p>
             Already have an account?{' '}
@@ -152,7 +162,7 @@ const Register = () => {
           </p>
         </div>
       </div>
-      
+
       {/* Add styles for the register page */}
       <style jsx="true">{`
         .auth-container {
@@ -163,7 +173,7 @@ const Register = () => {
           background-color: var(--bg-secondary);
           padding: var(--spacing-md);
         }
-        
+
         .auth-card {
           width: 100%;
           max-width: 400px;
@@ -172,23 +182,23 @@ const Register = () => {
           box-shadow: var(--shadow-md);
           padding: var(--spacing-xl);
         }
-        
+
         .auth-header {
           text-align: center;
           margin-bottom: var(--spacing-lg);
         }
-        
+
         .auth-title {
           font-size: var(--font-size-xl);
           font-weight: var(--font-weight-bold);
           color: var(--text-primary);
           margin-bottom: var(--spacing-xs);
         }
-        
+
         .auth-subtitle {
           color: var(--text-secondary);
         }
-        
+
         .error-message {
           display: flex;
           align-items: center;
@@ -198,19 +208,32 @@ const Register = () => {
           border-radius: var(--border-radius-md);
           margin-bottom: var(--spacing-md);
         }
-        
+
         .error-message svg {
           margin-right: var(--spacing-xs);
+          flex-shrink: 0;
         }
-        
+
+        .error-message span {
+          font-weight: var(--font-weight-medium);
+        }
+
+        .error-help-text {
+          margin-top: var(--spacing-xs);
+          margin-left: calc(var(--spacing-md) + var(--spacing-xs));
+          font-size: var(--font-size-sm);
+          color: var(--text-secondary);
+          line-height: 1.4;
+        }
+
         .auth-form {
           margin-bottom: var(--spacing-lg);
         }
-        
+
         .input-with-icon {
           position: relative;
         }
-        
+
         .input-icon {
           position: absolute;
           left: var(--spacing-sm);
@@ -218,18 +241,18 @@ const Register = () => {
           transform: translateY(-50%);
           color: var(--text-secondary);
         }
-        
+
         .input-with-icon input {
           padding-left: calc(var(--spacing-md) * 2);
         }
-        
+
         .form-text {
           display: block;
           margin-top: var(--spacing-xs);
           font-size: var(--font-size-xs);
           color: var(--text-secondary);
         }
-        
+
         .auth-button {
           width: 100%;
           padding: var(--spacing-md);
@@ -241,22 +264,22 @@ const Register = () => {
           cursor: pointer;
           transition: background-color var(--transition-fast);
         }
-        
+
         .auth-button:hover {
           background-color: #0056b3;
         }
-        
+
         .auth-footer {
           text-align: center;
           color: var(--text-secondary);
         }
-        
+
         .auth-link {
           color: var(--primary-color);
           font-weight: var(--font-weight-medium);
           text-decoration: none;
         }
-        
+
         .auth-link:hover {
           text-decoration: underline;
         }
