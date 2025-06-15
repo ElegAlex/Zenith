@@ -87,6 +87,11 @@ export const AuthProvider = ({ children }) => {
       if (err.response && err.response.data.error) {
         // If the server provides an error message, use it
         setError(err.response.data.error);
+      } else if (err.response) {
+        // Response received without a specific error message
+        const status = err.response.status;
+        setError(`Registration failed${status ? ` (status ${status})` : ''}. Please try again.`);
+        console.error('Registration error status:', status);
       } else if (err.message === 'Network Error') {
         // Handle network errors
         setError('Unable to connect to the server. Please check your internet connection and try again.');
@@ -122,6 +127,11 @@ export const AuthProvider = ({ children }) => {
       if (err.response && err.response.data.error) {
         // If the server provides an error message, use it
         setError(err.response.data.error);
+      } else if (err.response) {
+        // Response received without a specific error message
+        const status = err.response.status;
+        setError(`Login failed${status ? ` (status ${status})` : ''}. Please try again.`);
+        console.error('Login error status:', status);
       } else if (err.message === 'Network Error') {
         // Handle network errors
         setError('Unable to connect to the server. Please check your internet connection and try again.');
