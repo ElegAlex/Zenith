@@ -1,0 +1,28 @@
+# Base de données locale
+*.db
+*.sqlite
+*.sqlite3
+data/
+database/
+
+# Dépendances
+node_modules/
+vendor/
+venv/
+__pycache__/
+
+# Configuration sensible
+.env
+.env.local
+config/database.php
+
+# IDE PhpStorm
+.idea/
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
