@@ -83,7 +83,7 @@ const Register = () => {
             )}
             {formError.includes('An error occurred during registration') && (
               <p className="error-help-text">
-                We're experiencing some technical difficulties. Please try again in a few moments or contact our support team at <a href="mailto:support@zenith.com" className="auth-link">support@zenith.com</a> if the problem persists.
+                We're experiencing some technical difficulties. Please try again in a few moments or contact our support team at support@zenith.com if the problem persists.
               </p>
             )}
           </div>
