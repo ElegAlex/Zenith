@@ -36,23 +36,13 @@ UserSchema.pre('save', async function(next) {
     return next();
   }
 
-  try {
-    const salt = await bcrypt.genSalt(10);
-    this.password = await bcrypt.hash(this.password, salt);
-    next();
-  } catch (error) {
-    next(error);
-  }
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
 });
 
 // Match user entered password to hashed password in database
 UserSchema.methods.matchPassword = async function(enteredPassword) {
-  try {
-    return await bcrypt.compare(enteredPassword, this.password);
-  } catch (error) {
-    console.error('Password comparison error:', error);
-    throw new Error('Authentication error. Please try again.');
-  }
+  return await bcrypt.compare(enteredPassword, this.password);
 };
 
 module.exports = mongoose.model('User', UserSchema);
