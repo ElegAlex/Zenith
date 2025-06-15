@@ -11,6 +11,14 @@ vendor/
 venv/
 __pycache__/
 
+# Build artifacts
+/build/
+/dist/
+/frontend/build/
+/frontend/dist/
+/.next/
+/out/
+
 # Configuration sensible
 .env
 .env.local

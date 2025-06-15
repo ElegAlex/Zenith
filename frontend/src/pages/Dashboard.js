@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
 import { FiPlus, FiFolder, FiMessageSquare, FiCpu, FiBarChart2, FiClock } from 'react-icons/fi';
+import api from '../utils/api';
 import { AuthContext } from '../context/AuthContext';
 
 const Dashboard = () => {
@@ -19,28 +19,28 @@ const Dashboard = () => {
     const fetchDashboardData = async () => {
       try {
         setLoading(true);
-        
+
         // Fetch stats
-        const promptsRes = await axios.get('/api/prompts');
-        const projectsRes = await axios.get('/api/projects');
-        const aiModelsRes = await axios.get('/api/ai-models');
-        
+        const promptsRes = await api.get('/prompts');
+        const projectsRes = await api.get('/projects');
+        const aiModelsRes = await api.get('/ai-models');
+
         setStats({
           totalPrompts: promptsRes.data.count,
           totalProjects: projectsRes.data.count,
           totalAIModels: aiModelsRes.data.data.length
         });
-        
+
         // Fetch recent prompts (limited to 5)
         setRecentPrompts(promptsRes.data.data.slice(0, 5));
-        
+
         setLoading(false);
       } catch (err) {
         setError('Failed to load dashboard data');
         setLoading(false);
       }
     };
-    
+
     fetchDashboardData();
   }, []);
 
@@ -50,7 +50,7 @@ const Dashboard = () => {
         <h1 className="dashboard-title">Welcome, {user?.username}!</h1>
         <p className="dashboard-subtitle">Here's an overview of your prompt management</p>
       </div>
-      
+
       {/* Stats Cards */}
       <div className="stats-container">
         <div className="stat-card">
@@ -63,7 +63,7 @@ const Dashboard = () => {
           </div>
           <Link to="/prompts" className="stat-link">View all</Link>
         </div>
-        
+
         <div className="stat-card">
           <div className="stat-icon project-icon">
             <FiFolder />
@@ -74,7 +74,7 @@ const Dashboard = () => {
           </div>
           <Link to="/projects" className="stat-link">View all</Link>
         </div>
-        
+
         <div className="stat-card">
           <div className="stat-icon ai-model-icon">
             <FiCpu />
@@ -86,7 +86,7 @@ const Dashboard = () => {
           <Link to="/ai-models" className="stat-link">View all</Link>
         </div>
       </div>
-      
+
       {/* Quick Actions */}
       <div className="quick-actions">
         <h2 className="section-title">Quick Actions</h2>
@@ -97,14 +97,14 @@ const Dashboard = () => {
             </div>
             <span className="action-text">New Prompt</span>
           </Link>
-          
+
           <Link to="/projects/new" className="action-card">
             <div className="action-icon">
               <FiPlus />
             </div>
             <span className="action-text">New Project</span>
           </Link>
-          
+
           <Link to="/ai-models/new" className="action-card">
             <div className="action-icon">
               <FiPlus />
@@ -113,14 +113,14 @@ const Dashboard = () => {
           </Link>
         </div>
       </div>
-      
+
       {/* Recent Prompts */}
       <div className="recent-prompts">
         <div className="section-header">
           <h2 className="section-title">Recent Prompts</h2>
           <Link to="/prompts" className="view-all-link">View all</Link>
         </div>
-        
+
         {loading ? (
           <div className="loading-message">Loading recent prompts...</div>
         ) : error ? (
@@ -164,35 +164,35 @@ const Dashboard = () => {
           </div>
         )}
       </div>
-      
+
       {/* Add styles for the dashboard */}
       <style jsx="true">{`
         .dashboard {
           padding-bottom: var(--spacing-xl);
         }
-        
+
         .dashboard-header {
           margin-bottom: var(--spacing-lg);
         }
-        
+
         .dashboard-title {
           font-size: var(--font-size-xxl);
           font-weight: var(--font-weight-bold);
           color: var(--text-primary);
           margin-bottom: var(--spacing-xs);
         }
-        
+
         .dashboard-subtitle {
           color: var(--text-secondary);
         }
-        
+
         .stats-container {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
           gap: var(--spacing-md);
           margin-bottom: var(--spacing-xl);
         }
-        
+
         .stat-card {
           background-color: var(--white-color);
           border-radius: var(--border-radius-lg);
@@ -204,12 +204,12 @@ const Dashboard = () => {
           overflow: hidden;
           transition: transform var(--transition-fast), box-shadow var(--transition-fast);
         }
-        
+
         .stat-card:hover {
           transform: translateY(-3px);
           box-shadow: var(--shadow-md);
         }
-        
+
         .stat-icon {
           width: 50px;
           height: 50px;
@@ -220,40 +220,40 @@ const Dashboard = () => {
           font-size: 1.5rem;
           margin-right: var(--spacing-md);
         }
-        
+
         .prompt-icon {
           background-color: rgba(0, 112, 243, 0.1);
           color: var(--primary-color);
         }
-        
+
         .project-icon {
           background-color: rgba(40, 167, 69, 0.1);
           color: var(--success-color);
         }
-        
+
         .ai-model-icon {
           background-color: rgba(23, 162, 184, 0.1);
           color: var(--info-color);
         }
-        
+
         .stat-content {
           flex: 1;
         }
-        
+
         .stat-title {
           font-size: var(--font-size-sm);
           font-weight: var(--font-weight-medium);
           color: var(--text-secondary);
           margin: 0;
         }
-        
+
         .stat-value {
           font-size: var(--font-size-xl);
           font-weight: var(--font-weight-bold);
           color: var(--text-primary);
           margin: 0;
         }
-        
+
         .stat-link {
           position: absolute;
           bottom: var(--spacing-sm);
@@ -262,24 +262,24 @@ const Dashboard = () => {
           color: var(--primary-color);
           text-decoration: none;
         }
-        
+
         .section-title {
           font-size: var(--font-size-lg);
           font-weight: var(--font-weight-semibold);
           color: var(--text-primary);
           margin-bottom: var(--spacing-md);
         }
-        
+
         .quick-actions {
           margin-bottom: var(--spacing-xl);
         }
-        
+
         .actions-container {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
           gap: var(--spacing-md);
         }
-        
+
         .action-card {
           background-color: var(--white-color);
           border-radius: var(--border-radius-lg);
@@ -293,12 +293,12 @@ const Dashboard = () => {
           color: var(--text-primary);
           transition: transform var(--transition-fast), box-shadow var(--transition-fast);
         }
-        
+
         .action-card:hover {
           transform: translateY(-3px);
           box-shadow: var(--shadow-md);
         }
-        
+
         .action-icon {
           width: 50px;
           height: 50px;
@@ -311,35 +311,35 @@ const Dashboard = () => {
           font-size: 1.5rem;
           margin-bottom: var(--spacing-sm);
         }
-        
+
         .action-text {
           font-weight: var(--font-weight-medium);
         }
-        
+
         .recent-prompts {
           margin-top: var(--spacing-xl);
         }
-        
+
         .section-header {
           display: flex;
           justify-content: space-between;
           align-items: center;
           margin-bottom: var(--spacing-md);
         }
-        
+
         .view-all-link {
           color: var(--primary-color);
           text-decoration: none;
           font-size: var(--font-size-sm);
           font-weight: var(--font-weight-medium);
         }
-        
+
         .loading-message, .error-message {
           padding: var(--spacing-lg);
           text-align: center;
           color: var(--text-secondary);
         }
-        
+
         .empty-state {
           background-color: var(--white-color);
           border-radius: var(--border-radius-lg);
@@ -347,7 +347,7 @@ const Dashboard = () => {
           padding: var(--spacing-xl);
           text-align: center;
         }
-        
+
         .create-prompt-button {
           display: inline-block;
           margin-top: var(--spacing-md);
@@ -358,13 +358,13 @@ const Dashboard = () => {
           text-decoration: none;
           font-weight: var(--font-weight-medium);
         }
-        
+
         .prompts-list {
           display: grid;
           grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
           gap: var(--spacing-md);
         }
-        
+
         .prompt-card {
           background-color: var(--white-color);
           border-radius: var(--border-radius-lg);
@@ -373,36 +373,36 @@ const Dashboard = () => {
           position: relative;
           transition: transform var(--transition-fast), box-shadow var(--transition-fast);
         }
-        
+
         .prompt-card:hover {
           transform: translateY(-3px);
           box-shadow: var(--shadow-md);
         }
-        
+
         .prompt-title {
           font-size: var(--font-size-lg);
           font-weight: var(--font-weight-semibold);
           color: var(--text-primary);
           margin: 0 0 var(--spacing-sm);
         }
-        
+
         .prompt-meta {
           display: flex;
           gap: var(--spacing-md);
           margin-bottom: var(--spacing-sm);
         }
-        
+
         .prompt-model, .prompt-project {
           display: flex;
           align-items: center;
           font-size: var(--font-size-sm);
           color: var(--text-secondary);
         }
-        
+
         .prompt-model svg, .prompt-project svg {
           margin-right: var(--spacing-xs);
         }
-        
+
         .prompt-content {
           color: var(--text-primary);
           margin-bottom: var(--spacing-md);
@@ -411,7 +411,7 @@ const Dashboard = () => {
           -webkit-box-orient: vertical;
           overflow: hidden;
         }
-        
+
         .prompt-footer {
           display: flex;
           justify-content: space-between;
@@ -419,16 +419,16 @@ const Dashboard = () => {
           color: var(--text-secondary);
           margin-bottom: var(--spacing-md);
         }
-        
+
         .prompt-usage, .prompt-date {
           display: flex;
           align-items: center;
         }
-        
+
         .prompt-usage svg, .prompt-date svg {
           margin-right: var(--spacing-xs);
         }
-        
+
         .prompt-link {
           display: inline-block;
           color: var(--primary-color);

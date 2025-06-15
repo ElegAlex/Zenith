@@ -1,7 +1,7 @@
 import React, { createContext, useState, useEffect } from 'react';
-import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import jwtDecode from 'jwt-decode';
+import api from '../utils/api';
 
 // Create context
 export const AuthContext = createContext();
@@ -12,17 +12,11 @@ export const AuthProvider = ({ children }) => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   const navigate = useNavigate();
 
-  // Set axios default headers
-  useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    } else {
-      delete axios.defaults.headers.common['Authorization'];
-    }
-  }, [token]);
+  // Token is handled by api interceptor in utils/api.js
+  // No need to set headers manually
 
   // Check if user is authenticated on initial load
   useEffect(() => {
@@ -32,15 +26,15 @@ export const AuthProvider = ({ children }) => {
           // Check if token is expired
           const decoded = jwtDecode(token);
           const currentTime = Date.now() / 1000;
-          
+
           if (decoded.exp < currentTime) {
             // Token expired, logout user
             logout();
             return;
           }
-          
+
           // Token valid, get user data
-          const res = await axios.get('/api/users/profile');
+          const res = await api.get('/users/profile');
           setUser(res.data.user);
           setIsAuthenticated(true);
         } catch (err) {
@@ -56,22 +50,22 @@ export const AuthProvider = ({ children }) => {
     };
 
     loadUser();
-  }, [token]);
+  }, [token, logout]);
 
   // Register user
   const register = async (userData) => {
     setLoading(true);
     setError(null);
-    
+
     try {
-      const res = await axios.post('/api/users/register', userData);
-      
+      const res = await api.post('/users/register', userData);
+
       // Save token to localStorage and state
       localStorage.setItem('token', res.data.token);
       setToken(res.data.token);
       setUser(res.data.user);
       setIsAuthenticated(true);
-      
+
       navigate('/');
       return true;
     } catch (err) {
@@ -90,16 +84,16 @@ export const AuthProvider = ({ children }) => {
   const login = async (userData) => {
     setLoading(true);
     setError(null);
-    
+
     try {
-      const res = await axios.post('/api/users/login', userData);
-      
+      const res = await api.post('/users/login', userData);
+
       // Save token to localStorage and state
       localStorage.setItem('token', res.data.token);
       setToken(res.data.token);
       setUser(res.data.user);
       setIsAuthenticated(true);
-      
+
       navigate('/');
       return true;
     } catch (err) {
@@ -118,12 +112,12 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     // Remove token from localStorage
     localStorage.removeItem('token');
-    
+
     // Reset state
     setToken(null);
     setUser(null);
     setIsAuthenticated(false);
-    
+
     // Redirect to login
     navigate('/login');
   };

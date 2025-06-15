@@ -6,7 +6,7 @@ import { FiHome, FiFolder, FiMessageSquare, FiCpu, FiUser, FiLogOut, FiMenu, FiX
 const Layout = () => {
   const { user, logout } = useContext(AuthContext);
   const [sidebarOpen, setSidebarOpen] = useState(true);
-  const navigate = useNavigate();
+  // const navigate = useNavigate(); // Supprimez cette ligne si pas utilisée
 
   const toggleSidebar = () => {
     setSidebarOpen(!sidebarOpen);
@@ -22,7 +22,7 @@ const Layout = () => {
             {sidebarOpen ? <FiX /> : <FiMenu />}
           </button>
         </div>
-        
+
         <nav className="sidebar-nav">
           <ul>
             <li>
@@ -47,7 +47,7 @@ const Layout = () => {
             </li>
           </ul>
         </nav>
-        
+
         <div className="sidebar-footer">
           <div className="user-info">
             <div className="user-avatar">
